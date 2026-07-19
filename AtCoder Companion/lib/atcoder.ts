@@ -7,15 +7,29 @@ export function getContestInfo(): ContestInfo {
 
   const times = document.querySelectorAll("time");
 
-  const startTime =
+  const startText =
     times.length >= 1
-      ? times[0].getAttribute("datetime") ?? ""
+      ? times[0].textContent?.trim() ?? ""
       : "";
 
-  const endTime =
+  const endText =
     times.length >= 2
-      ? times[1].getAttribute("datetime") ?? ""
+      ? times[1].textContent?.trim() ?? ""
       : "";
+
+  function parseAtCoderTime(text: string): Date {
+    // 2026-07-31(金) 19:00
+    const normalized = text.replace(/\(.+?\)/, "");
+    return new Date(normalized);
+  }
+
+  const startTime = parseAtCoderTime(startText);
+  const endTime = parseAtCoderTime(endText);
+
+  console.log("times:", times);
+  console.log("start raw:", startTime);
+  console.log("end raw:", endTime);
+  console.log(document.querySelectorAll("time"));
 
   return {
     name,
@@ -23,4 +37,18 @@ export function getContestInfo(): ContestInfo {
     endTime,
     url: location.href,
   };
+}
+
+export function getRegisterButton(): HTMLButtonElement | null {
+  const buttons = Array.from(document.querySelectorAll("button"));
+
+  return (
+    buttons.find((button) =>
+      button.textContent?.trim().toLowerCase().includes("register"),
+    ) ?? null
+  );
+}
+
+export function isRegistered(): boolean {
+  return getRegisterButton() === null;
 }
