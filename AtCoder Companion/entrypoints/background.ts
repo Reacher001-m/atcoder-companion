@@ -31,7 +31,9 @@ export default defineBackground(() => {
 
       const url = createGoogleCalendarUrl(event);
 
-      console.log(url);
+      await chrome.tabs.create({
+        url,
+      });
     }
   });
 });
