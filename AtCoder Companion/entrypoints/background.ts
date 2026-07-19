@@ -2,6 +2,7 @@ import { createCalendarEvent } from "../lib/calendar";
 import { fromDTO } from "../lib/contest";
 import { getRuntime } from "../lib/extension";
 import { getCurrentContest, saveCurrentContest } from "../lib/repository";
+import { createGoogleCalendarUrl } from "../lib/calendar";
 
 export default defineBackground(() => {
   console.log("Background started");
@@ -28,7 +29,9 @@ export default defineBackground(() => {
 
       const event = createCalendarEvent(contest);
 
-      console.table(event);
+      const url = createGoogleCalendarUrl(event);
+
+      console.log(url);
     }
   });
 });

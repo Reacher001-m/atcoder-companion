@@ -11,3 +11,11 @@ export interface ContestInfo {
   endTime: Date;
   url: string;
 }
+
+export interface CalendarEvent {
+  title: string;
+  start: Date;
+  end: Date;
+  description: string;
+  location: string;
+}

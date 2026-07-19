@@ -1,30 +1,34 @@
-import type { ContestInfo } from "./types";
-
-export interface CalendarEvent {
-  summary: string;
-  description: string;
-  start: {
-    dateTime: string;
-  };
-  end: {
-    dateTime: string;
-  };
-}
+import type { CalendarEvent, ContestInfo } from "./types";
 
 export function createCalendarEvent(
   contest: ContestInfo,
 ): CalendarEvent {
   return {
-    summary: contest.name,
-
+    title: contest.name,
+    start: contest.startTime,
+    end: contest.endTime,
     description: contest.url,
-
-    start: {
-      dateTime: contest.startTime.toISOString(),
-    },
-
-    end: {
-      dateTime: contest.endTime.toISOString(),
-    },
+    location: "AtCoder",
   };
+}
+
+function formatDate(date: Date): string {
+  return date
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace(/\.\d{3}Z$/, "Z");
+}
+
+export function createGoogleCalendarUrl(
+  event: CalendarEvent,
+): string {
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: event.title,
+    dates: `${formatDate(event.start)}/${formatDate(event.end)}`,
+    details: event.description,
+    location: event.location,
+  });
+
+  return `https://calendar.google.com/calendar/render?${params}`;
 }
